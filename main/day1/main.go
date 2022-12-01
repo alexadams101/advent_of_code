@@ -9,10 +9,10 @@ import (
 
 func main() {
 	//Part 1
-	data := loadData("main/day1/input.txt")
+	elves := loadData("main/day1/input.txt")
 
 	totals := make([]int, 0)
-	for _, elf := range data {
+	for _, elf := range elves {
 		totals = append(totals, sum(elf))
 	}
 	sort.Sort(sort.Reverse(sort.IntSlice(totals)))
@@ -29,7 +29,7 @@ func loadData(path string) [][]int {
 
 	list := make([][]int, 0)
 	elf := make([]int, 0)
-    for idx, val := range content {
+	for idx, val := range content {
 		if val != "" {
 			calories, _ := strconv.Atoi(val)
 			elf = append(elf, calories)	
@@ -41,7 +41,7 @@ func loadData(path string) [][]int {
 			list = append(list, elf)
 			elf = make([]int, 0)
 		}
-    }
+	}
 	return list
 }
 
