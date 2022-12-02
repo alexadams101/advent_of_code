@@ -16,31 +16,25 @@ func main() {
 		totals = append(totals, sum(elf))
 	}
 	sort.Sort(sort.Reverse(sort.IntSlice(totals)))
-	fmt.Println(totals[0])
+	fmt.Println(fmt.Sprint("Part 1: ", totals[0]))
 
 	//Part 2
-	top3 := sum([]int {totals[0], totals[1], totals[2]})
-	fmt.Println(top3)
+	top3 := totals[0] + totals[1] + totals[2]
+	fmt.Println(fmt.Sprint("Part 2: ", top3))
 }
 
 func loadData(path string) [][]int {
 	file, _ := os.ReadFile(path)
-	content := strings.Split(string(file), "\n")
+	content := strings.Split(string(file), "\n\n")
 
 	list := make([][]int, 0)
-	elf := make([]int, 0)
-	for idx, val := range content {
-		if val != "" {
-			calories, _ := strconv.Atoi(val)
+	for _, val := range content {
+		elf := make([]int, 0)
+		for _,calorie := range strings.Split(val, "\n") {
+			calories, _ := strconv.Atoi(calorie)
 			elf = append(elf, calories)	
-		} 
-		if idx==len(content)-1 {
-			list = append(list, elf)
 		}
-		if val == "" {
-			list = append(list, elf)
-			elf = make([]int, 0)
-		}
+		list = append(list, elf)
 	}
 	return list
 }
