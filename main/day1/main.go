@@ -19,8 +19,8 @@ func main() {
 	fmt.Println(fmt.Sprint("Part 1: ", totals[0]))
 
 	//Part 2
-	top3 := totals[0] + totals[1] + totals[2]
-	fmt.Println(fmt.Sprint("Part 2: ", top3))
+	top3 := totals[0:3]
+	fmt.Println(fmt.Sprint("Part 2: ", sum(top3)))
 }
 
 func loadData(path string) [][]int {

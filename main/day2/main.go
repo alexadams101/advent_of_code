@@ -5,38 +5,60 @@ import (
 	"strings"
 )
 
+type move int64
+type result int64
+type roundPart1 struct {
+	opponentMove move
+	yourMove move
+}
+type roundPart2 struct {
+	opponentMove move
+	result result
+}
+
+const (
+	Rock move = 1
+	Paper move = 2
+	Scissors move = 3
+)
+const (
+	Loss result = 0
+	Draw result = 3
+	Win result = 6
+)
+
 func main() {
 	//Part 1
 	data := loadData("main/day2/input.txt")
-	totalPt1 := 0
-	for _, round := range data {
-		winningVal := findWinner(round[0], round[1])
-		value := getValue(round[1])
-		switch winningVal{
-		case "X", "Y", "Z":
-			totalPt1 += value + 6
-		case "":
-			totalPt1 += value + 3
-		default:
-			totalPt1 += value
-		}
+
+	roundsPart1 := make([]roundPart1,0)
+
+	for _, line := range data {
+		roundsPart1 = append(roundsPart1, roundPart1{opponentMove: getMove(line[0]), yourMove: getMove(line[1])})
 	}
-	fmt.Println(fmt.Sprint("Part 1: ", totalPt1))
+
+	totalPart1 := 0
+	for _, round := range roundsPart1 {
+		result := generateResult(round.opponentMove, round.yourMove)
+		totalPart1 += int(result) + int(round.yourMove)
+	}
+
+	fmt.Println(fmt.Sprint("Part 1: ", totalPart1))
 
 	//Part 2
-	totalPt2 := 0
-	for _, round := range data {
-		value := getValue(findValue(round[0], round[1]))
-		switch round[1]{
-		case "Z":
-			totalPt2 += value + 6
-		case "Y":
-			totalPt2 += value + 3
-		case "X":
-			totalPt2 += value
-		}
+	roundsPart2 := make([]roundPart2,0)
+	
+	for _, line := range data {
+		roundsPart2 = append(roundsPart2, roundPart2{opponentMove: getMove(line[0]), result: getResult(line[1])})
 	}
-	fmt.Println(fmt.Sprint("Part 2: ", totalPt2))
+
+	totalPart2 := 0
+	for _, round := range roundsPart2 {
+		move := findMove(round.opponentMove, round.result)
+		totalPart2 += int(round.result) + int(move)
+	}
+
+	fmt.Println(fmt.Sprint("Part 2: ", totalPart2))
 }
 
 func loadData(path string) [][]string {
@@ -51,72 +73,78 @@ func loadData(path string) [][]string {
 	return list
 }
 
-func getValue(val string) int {
-	if val == "A" || val == "X" {
-		return 1
+func getMove(val string) move {
+	switch val {
+	case "A", "X":
+		return Rock
+	case "B", "Y":
+		return Paper
+	default:
+		return Scissors
 	}
-	if val == "B" || val == "Y" {
-		return 2
-	}
-	return 3
 }
 
-func findWinner(val1 string, val2 string) string {
-	switch val1 {
-	case "A":
-		switch val2 {
-		case "Y":
-			return "Y"
-		case "Z":
-			return "A"
-		}
-	case "B":
-		switch val2 {
-		case "X":
-			return "B"
-		case "Z":
-			return "Z"
-		}
-	case "C":
-		switch val2 {
-		case "X":
-			return "X"
-		case "Y":
-			return "C"
-		}
+func getResult(val string) result {
+	switch val {
+	case "X":
+		return Loss
+	case "Y":
+		return Draw
+	default:
+		return Win
 	}
-	return ""
 }
 
-func findValue(val1 string, val2 string) string {
-	switch val1 {
-	case "A":
-		switch val2 {
-		case "X":
-			return "Z"
-		case "Z":
-			return "Y"
-		default:
-			return "X"
+func generateResult(opponentMove move, yourMove move) result {
+	switch opponentMove {
+	case Rock:
+		switch yourMove {
+		case Paper:
+			return Win
+		case Scissors:
+			return Loss
 		}
-	case "B":
-		switch val2 {
-		case "X":
-			return "X"
-		case "Z":
-			return "Z"
-		default:
-			return "Y"
+	case Paper:
+		switch yourMove {
+		case Rock:
+			return Loss
+		case Scissors:
+			return Win
+		}
+	case Scissors:
+		switch yourMove {
+		case Rock:
+			return Win
+		case Paper:
+			return Loss
+		}
+	}
+	return Draw
+}
+
+func findMove(opponentMove move, result result) move {
+	switch opponentMove {
+	case Rock:
+		switch result {
+		case Loss:
+			return Scissors
+		case Win:
+			return Paper
+		}
+	case Paper:
+		switch result {
+		case Loss:
+			return Rock
+		case Win:
+			return Scissors
 		}	
-	case "C":
-		switch val2 {
-		case "X":
-			return "Y"
-		case "Z":
-			return "X"
-		default:
-			return "Z"
+	case Scissors:
+		switch result {
+		case Loss:
+			return Paper
+		case Win:
+			return Rock
 		}
 	}
-	return ""
+	return opponentMove
 }
