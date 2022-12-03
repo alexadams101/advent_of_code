@@ -34,7 +34,7 @@ func main() {
 	roundsPart1 := make([]roundPart1,0)
 
 	for _, line := range data {
-		roundsPart1 = append(roundsPart1, roundPart1{opponentMove: getMove(line[0]), yourMove: getMove(line[1])})
+		roundsPart1 = append(roundsPart1, roundPart1{getMove(line[0]), getMove(line[1])})
 	}
 
 	totalPart1 := 0
@@ -43,13 +43,13 @@ func main() {
 		totalPart1 += int(result) + int(round.yourMove)
 	}
 
-	fmt.Println(fmt.Sprint("Part 1: ", totalPart1))
+	fmt.Println("Part 1:", totalPart1)
 
 	//Part 2
 	roundsPart2 := make([]roundPart2,0)
 	
 	for _, line := range data {
-		roundsPart2 = append(roundsPart2, roundPart2{opponentMove: getMove(line[0]), result: getResult(line[1])})
+		roundsPart2 = append(roundsPart2, roundPart2{getMove(line[0]), getResult(line[1])})
 	}
 
 	totalPart2 := 0
@@ -58,7 +58,7 @@ func main() {
 		totalPart2 += int(round.result) + int(move)
 	}
 
-	fmt.Println(fmt.Sprint("Part 2: ", totalPart2))
+	fmt.Println("Part 2:", totalPart2)
 }
 
 func loadData(path string) [][]string {

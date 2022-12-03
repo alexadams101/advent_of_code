@@ -16,11 +16,11 @@ func main() {
 		totals = append(totals, sum(elf))
 	}
 	sort.Sort(sort.Reverse(sort.IntSlice(totals)))
-	fmt.Println(fmt.Sprint("Part 1: ", totals[0]))
+	fmt.Println("Part 1:", totals[0])
 
 	//Part 2
 	top3 := totals[0:3]
-	fmt.Println(fmt.Sprint("Part 2: ", sum(top3)))
+	fmt.Println("Part 2:", sum(top3))
 }
 
 func loadData(path string) [][]int {

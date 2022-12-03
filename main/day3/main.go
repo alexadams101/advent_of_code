@@ -12,8 +12,8 @@ func main() {
 	total := 0
 	for _, line := range data {
 		duplicates := make(map[rune]int, 0)
-		compartment1 := line[0:len(line)/2]
-		compartment2 := line[len(line)/2:len(line)]
+		compartment1 := line[:len(line)/2]
+		compartment2 := line[len(line)/2:]
 		for _, char := range compartment1 {
 			if strings.Contains(compartment2, string(char)) {
 				duplicates[char] += 1
@@ -23,7 +23,7 @@ func main() {
 			total += getPriority(char)
 		}
 	}
-	fmt.Println(fmt.Sprint("Part 1: ", total))
+	fmt.Println("Part 1:", total)
 
 	//Part 2
 	total = 0
@@ -37,7 +37,7 @@ func main() {
 		}
 		total += getPriority(badge)
     }
-	fmt.Println(fmt.Sprint("Part 2: ", total))
+	fmt.Println("Part 2:", total)
 }
 
 func loadData(path string) []string {
