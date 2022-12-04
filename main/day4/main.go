@@ -11,16 +11,15 @@ type pair struct {
 	section2 []int
 }
 
+type fits func([]int, []int) bool
+
 func main() {
 	//Part 1
 	data := loadData("main/day4/input.txt")
 	noOfPairs := 0
 	for _, pair := range data {
-		if len(pair.section1) > len(pair.section2) && containsSlicePart1(pair.section1, pair.section2) {
-			noOfPairs ++
-		} 
-		if len(pair.section2) >= len(pair.section1) && containsSlicePart1(pair.section2, pair.section1) {
-			noOfPairs ++
+		if containsSlice(pair.section1, pair.section2, sliceFitsComplete) {
+			noOfPairs++
 		}
 	}
 	fmt.Println("Part 1:", noOfPairs)
@@ -28,11 +27,8 @@ func main() {
 	//Part 2
 	noOfPairs = 0
 	for _, pair := range data {
-		if len(pair.section1) > len(pair.section2) && containsSlicePart2(pair.section1, pair.section2) {
-			noOfPairs ++
-		} 
-		if len(pair.section2) >= len(pair.section1) && containsSlicePart2(pair.section2, pair.section1) {
-			noOfPairs ++
+		if containsSlice(pair.section1, pair.section2, sliceFitsPartial) {
+			noOfPairs++
 		}
 	}
 	fmt.Println("Part 2:", noOfPairs)
@@ -61,7 +57,17 @@ func getSections(ref string) []int {
 	return sections
 }
 
-func containsSlicePart1(slice []int, sliceToFit []int) bool {
+func containsSlice(slice1 []int, slice2 []int, fits fits) bool {
+	if len(slice1) > len(slice2) && fits(slice1, slice2) {
+		return true
+	} 
+	if len(slice2) >= len(slice1) && fits(slice2, slice1) {
+		return true
+	}
+	return false
+}
+
+func sliceFitsComplete(slice []int, sliceToFit []int) bool {
 	for _, v := range sliceToFit {
 		if !contains(slice,v) {
 			return false
@@ -70,7 +76,7 @@ func containsSlicePart1(slice []int, sliceToFit []int) bool {
 	return true
 }
 
-func containsSlicePart2(slice []int, sliceToFit []int) bool {
+func sliceFitsPartial(slice []int, sliceToFit []int) bool {
 	for _, v := range sliceToFit {
 		if contains(slice,v) {
 			return true
